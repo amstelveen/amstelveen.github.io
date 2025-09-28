@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Quote Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    blockquote {
+      font-style: italic;
+      border-left: 4px solid #007acc;
+      padding-left: 12px;
+      margin: 20px 0;
+      background: #e9f5ff;
+    }
+    pre {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Welcome to My Page</h1>
+
+  <h2>Inspirational Quote</h2>
+  <blockquote>
+    “Data is a precious thing and will last longer than the systems themselves.”  
+    <br><small>— Tim Berners-Lee</small>
+  </blockquote>
+
+  <h2>Example SQL Script</h2>
+  <pre><code>
+-- Create a sample table
+CREATE TABLE employees (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100),
+    department VARCHAR(50),
+    salary NUMERIC(10,2)
+);
+
+-- Insert sample data
+INSERT INTO employees (name, department, salary)
+VALUES ('John Doe', 'IT', 5000.00);
+
+-- Query the data
+SELECT * FROM employees;
+  </code></pre>
+
+</body>
+</html>
