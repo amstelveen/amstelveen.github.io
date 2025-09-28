@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oracle Command/title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    blockquote {
+      font-style: italic;
+      border-left: 4px solid #007acc;
+      padding-left: 12px;
+      margin: 20px 0;
+      background: #e9f5ff;
+    }
+    pre {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Oracle Script</h1>
+
+
+  <h2>Example SQL Script</h2>
+  <pre><code>
+
+startup database open mode
+------------------------------
+srvctl start instance -d ilinkbch -i ilinkbch1
+
+startup database mount state
+------------------------------
+srvctl start instance -d ilinkbch -i ilinkbch1 -o mount
+
+check database config
+------------------------------
+srvctl config  database -d H3IORT
+
+check database config
+------------------------------
+srvctl status database -d ilinkbch -i ilinkbch1
+
+kill -9 $(ps -ef | grep LOCAL=NO | grep oracle$ORACLE_SID | awk '{print $2}')
+
+check service name
+------------------------------
+[oracle@jktmmpvilinkdb01:~]$ srvctl status service -d ilinkoln
+Service ILONLINE is running on instance(s) ilinkoln1
+
+[oracle@jktmmpvilinkdb01:~]$ srvctl status service -d ilinkbch
+Service ILBATCH is running on instance(s) ilinkbch1
+
+[oracle@jktmmpvilinkdb01:~]$ srvctl status service -d ilinkaro
+Service ILARCHONLINE is running on instance(s) ilinkaro1
+
+[oracle@jktmmpvilinkdb01:~]$ srvctl status service -d ilinkarb
+Service ILARCHBATCH is running on instance(s) ilinkarb1
+
+
+/u01/app/12.2.0/grid/bin/crsctl stop crs
+/u01/app/12.2.0/grid/bin/crsctl start crs
+/u01/app/12.2.0/grid/bin/crsctl status res -t
+
+crsctl check cluster -all
+
+
+  </code></pre>
+
+</body>
+</html>
