@@ -1,0 +1,205 @@
+Below is a clean, step-by-step guide for RHEL 9 to install Apache (httpd) + PHP, run Apache on port 8081, and use /opt as the web root.
+
+
+⸻
+
+1️⃣ Install Apache (httpd)
+
+sudo dnf install -y httpd
+
+Enable and start it:
+
+sudo systemctl enable httpd
+sudo systemctl start httpd
+
+Check:
+
+httpd -v
+
+
+⸻
+
+2️⃣ Install PHP (RHEL 9 default PHP 8.x)
+
+Check available PHP modules:
+
+sudo dnf module list php
+
+Enable PHP 8.1 (recommended):
+
+sudo dnf module enable php:8.1 -y
+
+Install PHP and common extensions:
+
+sudo dnf install -y \
+php php-cli php-common php-fpm \
+php-mysqlnd php-opcache php-gd php-xml php-mbstring
+
+Verify:
+
+php -v
+
+
+⸻
+
+3️⃣ Change Apache to listen on port 8081
+
+Edit Apache ports:
+
+sudo vi /etc/httpd/conf/httpd.conf
+
+Find:
+
+Listen 80
+
+Change to:
+
+Listen 8081
+
+
+⸻
+
+4️⃣ Set Apache DocumentRoot to /opt
+
+Create web directory
+
+sudo mkdir -p /opt/httpd
+sudo chown -R apache:apache /opt/httpd
+sudo chmod -R 755 /opt/httpd
+
+Update Apache config
+
+Edit:
+
+sudo vi /etc/httpd/conf/httpd.conf
+
+Change:
+
+DocumentRoot "/var/www/html"
+
+To:
+
+DocumentRoot "/opt/httpd"
+
+Also update <Directory> block:
+
+<Directory "/opt/httpd">
+    AllowOverride All
+    Require all granted
+</Directory>
+
+
+⸻
+
+5️⃣ Configure Apache to use PHP
+
+PHP is automatically loaded via php.conf.
+Verify file exists:
+
+ls /etc/httpd/conf.d/php.conf
+
+No manual change needed.
+
+⸻
+
+6️⃣ SELinux configuration (IMPORTANT)
+
+Since you use /opt, SELinux must allow it.
+
+Set correct SELinux context
+
+sudo semanage fcontext -a -t httpd_sys_content_t "/opt/httpd(/.*)?"
+sudo restorecon -Rv /opt/httpd
+
+If semanage not found:
+
+sudo dnf install -y policycoreutils-python-utils
+
+
+⸻
+
+7️⃣ Firewall: open port 8081
+
+sudo firewall-cmd --permanent --add-port=8081/tcp
+sudo firewall-cmd --reload
+
+Verify:
+
+sudo firewall-cmd --list-ports
+
+
+⸻
+
+8️⃣ Create PHP test file
+
+sudo vi /opt/httpd/index.php
+
+Add:
+
+<?php
+phpinfo();
+?>
+
+Set permission:
+
+sudo chown apache:apache /opt/httpd/index.php
+
+
+⸻
+
+9️⃣ Restart Apache
+
+sudo systemctl restart httpd
+
+Check status:
+
+sudo systemctl status httpd
+
+
+⸻
+
+🔟 Test in browser
+
+Open:
+
+http://<server-ip>:8081
+
+You should see PHP Info page 🎉
+
+⸻
+
+🔎 Troubleshooting commands
+
+Apache logs:
+
+/var/log/httpd/error_log
+/var/log/httpd/access_log
+
+SELinux denials:
+
+sudo ausearch -m avc -ts recent
+
+Port check:
+
+ss -tulnp | grep 8081
+
+
+⸻
+
+✅ Summary
+
+✔ Apache installed
+✔ PHP 8.1 enabled
+✔ Port 8081
+✔ Web root /opt/httpd
+✔ SELinux + Firewall configured
+
+⸻
+
+If you want next:
+	•	VirtualHost config
+	•	PHP-FPM tuning
+	•	Secure Apache (SSL on 8081)
+	•	Deploy Laravel / PHP app
+
+Just tell me 👍
